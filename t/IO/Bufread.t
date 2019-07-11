@@ -10,6 +10,15 @@ subtest ‘tdata/bufread.txt’ => {
     cmp-ok($bufread.read(5), ‘eq’, ‘’.encode);
 }
 
+subtest ‘tdata/bufread-lines.txt’ => {
+    my $handle := open(‘tdata/bufread-lines.txt’, :bin);
+    my $bufread := IO::Bufread.new($handle);
+    cmp-ok($bufread.read-line, ‘eq’, “hello\n”.encode);
+    cmp-ok($bufread.read-line, ‘eq’, “world\n”.encode);
+    cmp-ok($bufread.read-line, ‘eq’, “test\n”.encode);
+    cmp-ok($bufread.read-line, ‘eq’, ‘’.encode);
+};
+
 # TODO: Need a test with sockets.
 
 subtest ‘die’ => {

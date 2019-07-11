@@ -57,3 +57,16 @@ method read(::?CLASS:D: Int:D $n --> Blob:D)
     $!buffer = $!buffer.subbuf($slice.bytes);
     $slice;
 }
+
+method read-line(::?CLASS:D: --> Blob:D)
+{
+    my constant LF = “\n”.encode;
+    my Blob:D $r = Blob.allocate(0);
+    loop {
+        my $b := self.read(1);
+        last unless $b;
+        $r ~= $b;
+        last if $b eq LF;
+    }
+    $r;
+}
