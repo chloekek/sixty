@@ -41,7 +41,7 @@ use X::HTTP::RequestLine;
 has Str $.method is required;
 has Str $.request-uri is required;
 has Str:D %.headers{Str:D};
-has IO::Bufread $.body is required;
+has $.body is required;
 
 method read(::?CLASS:U: IO::Bufread:D $from --> ::?CLASS:D)
 {
