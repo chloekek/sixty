@@ -30,6 +30,15 @@ a mere LF as line separator is sufficient; no CR needed; and
 the colon in a header may be followed by arbitrary whitespace, not just SP or
 HT.
 
+=head2 Request body
+
+The request body must be an object with a read method with the signature
+C<(Int:D $n --E<gt> Nil)>N<The I<IO::Bufread:D>, I<IO::Handle:D>, and
+I<IO::Socket:D> types satisfy this requirement>.
+
+When creating a request with the I<read> method, the body is set to an object
+that properly handles chunked encoding and compression based on the headers.
+
 =end pod
 
 unit class HTTP::Server::Request;
@@ -47,6 +56,7 @@ method read(::?CLASS:U: IO::Bufread:D $from --> ::?CLASS:D)
 {
     my ($method, $request-uri) := read-request-line($from);
     my %headers := read-headers($from);
+    # TODO: Handle chunked and compressed encoding.
     ::?CLASS.new(:$method, :$request-uri, :%headers, body => $from);
 }
 

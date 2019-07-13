@@ -28,6 +28,10 @@ The response body must be a routine that accepts any object with a write
 method with the signature C<(Blob:D --E<gt> Nil)>N<The I<IO::Handle:D> and
 I<IO::Socket:D> types satisfy this requirement>.
 
+When writing a response with the I<write> method, the object passed to the
+body routine properly handles chunked encoding and compression based on the
+headers.
+
 =end pod
 
 unit class HTTP::Server::Response;
@@ -43,6 +47,7 @@ method write(::?CLASS:D: $to --> Nil)
     self!write-status-line($to);
     self!write-headers($to);
     $to.write(CRLF);
+    # TODO: Handle chunked and compressed encoding.
     &!body($to);
 }
 
