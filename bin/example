@@ -1,0 +1,19 @@
+use HTTP::Server;
+use HTTP::Server::Response;
+
+multi MAIN(‘http’, Str:D $host, Int:D $port --> Nil)
+{
+    HTTP::Server::listen(
+        localhost  => $host,
+        localport  => $port,
+        on-error   => -> $error { $*ERR.say($error) },
+        on-request => -> $request {
+            HTTP::Server::Response.new(
+                status-code => 200,
+                reason-phrase => ‘OK’,
+                headers => %(Content-Type => ‘text/html’),
+                body => -> $to { $to.write($request.request-uri.encode) },
+            );
+        },
+    );
+}

@@ -7,7 +7,13 @@ stdenv.mkDerivation {
     installPhase = ''
         mkdir --parents $out/bin $out/share/doc
 
-        cp --recursive lib t $out/share
+        cp --recursive bin lib t $out/share
+
+        makeWrapper \
+            ${rakudo}/bin/perl6 \
+            $out/bin/sixty.example \
+            --prefix PERL6LIB , $out/share/lib \
+            --add-flags $out/share/bin/example
 
         makeWrapper \
             ${perl}/bin/prove \
